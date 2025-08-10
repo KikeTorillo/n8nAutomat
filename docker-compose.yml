@@ -5,10 +5,10 @@ services:
     container_name: postgres_db
     restart: always
     environment:
-      - POSTGRES_DB=postgres  # Base de datos por defecto
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=StrongPassword123!  # Cambiar en producción
-      - TZ=America/Mexico_City
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - TZ=${TZ}
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
       - ./init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
@@ -33,17 +33,17 @@ services:
     environment:
       DB_TYPE: postgresdb
       DB_POSTGRESDB_DATABASE: n8n_db
-      DB_POSTGRESDB_USER: admin
-      DB_POSTGRESDB_PASSWORD: StrongPassword123!
+      DB_POSTGRESDB_USER: ${POSTGRES_USER}
+      DB_POSTGRESDB_PASSWORD: ${POSTGRES_PASSWORD}
       DB_POSTGRESDB_HOST: postgres
       DB_POSTGRESDB_PORT: 5432
       N8N_BASIC_AUTH_ACTIVE: "true"
-      N8N_BASIC_AUTH_USER: admin
-      N8N_BASIC_AUTH_PASSWORD: n8nPassword!  # Cambiar
+      N8N_BASIC_AUTH_USER: ${N8N_BASIC_AUTH_USER}
+      N8N_BASIC_AUTH_PASSWORD: ${N8N_BASIC_AUTH_PASSWORD}
       N8N_HOST: 0.0.0.0
-      WEBHOOK_URL: https://9c9a45a54f5e.ngrok-free.app/
-      N8N_EDITOR_BASE_URL: https://9c9a45a54f5e.ngrok-free.app/
-      TZ: America/Mexico_City                # Ajustar zona horaria
+      WEBHOOK_URL: ${WEBHOOK_URL}
+      N8N_EDITOR_BASE_URL: ${N8N_EDITOR_BASE_URL}
+      TZ: ${TZ}
     volumes:
       - ./data/n8n:/home/node/.n8n
     networks:
@@ -62,12 +62,12 @@ services:
     environment:
       DATABASE_ENABLED: "true"
       DATABASE_PROVIDER: postgresql
-      DATABASE_CONNECTION_URI: "postgresql://admin:StrongPassword123!@postgres:5432/evolution_db"
-      AUTHENTICATION_API_KEY: EvoAPIKey123!   # Cambiar (clave de acceso)
-      SERVER_URL: http://localhost:8081       # URL accesible desde fuera del container
+      DATABASE_CONNECTION_URI: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/evolution_db"
+      AUTHENTICATION_API_KEY: ${AUTHENTICATION_API_KEY}
+      SERVER_URL: ${SERVER_URL}
       DEL_INSTANCE: "false"
       CACHE_REDIS_ENABLED: "false"            # Opcional: habilitar Redis si se necesita
-      CONFIG_SESSION_PHONE_VERSION: "2.3000.1023204200"
+      CONFIG_SESSION_PHONE_VERSION: "${CONFIG_SESSION_PHONE_VERSION}"
     volumes:
       - ./data/evolution:/evolution/instances
     networks:
@@ -84,8 +84,8 @@ services:
     ports:
       - "5050:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
       PGADMIN_CONFIG_SERVER_MODE: "False"
     volumes:
       - ./data/pgadmin:/var/lib/pgadmin

@@ -458,7 +458,7 @@
             },
             {
               "name": "apikey",
-              "value": "EvoAPIKey123!"
+              "value": "={{$env.AUTHENTICATION_API_KEY}}"
             }
           ]
         },
